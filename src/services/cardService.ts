@@ -43,6 +43,7 @@ export class CardService {
         brand: CardBrand;
         cardNumber: string;
         tier: CardTier;
+        currency: string;
     }) {
         // Validation
         if (!data.companyId) {

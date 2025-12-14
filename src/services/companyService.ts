@@ -1,7 +1,8 @@
 import { prisma } from '../lib/prisma';
 import { maskCardNumber } from '../lib/helpers';
 import { CompanyOverviewResponse, CompanyPayload } from '../models/overview';
-import { Prisma } from "@prisma/client";
+import { Prisma, InvoiceStatus } from "@prisma/client";
+import { isDataView } from 'util/types';
 
 export class CompanyService {
     static async getCompanyById(id: string) {
@@ -12,6 +13,7 @@ export class CompanyService {
             }
         });
 
+        console.log(company)
         if (!company) {
             throw new Error('Company not found');
         }
@@ -25,13 +27,15 @@ export class CompanyService {
         return company;
     }
 
-    static async createCompany(name: string) {
-        if (!name) {
+    static async createCompany(data: {
+            name: string;
+        }) {
+        if (!data.name) {
             throw new Error('Name is required');
         }
 
         const newCompany = await prisma.company.create({
-            data: { name },
+            data,
             include: {
                 cards: true
             }
@@ -65,13 +69,16 @@ export class CompanyService {
                     orderBy: { createdAt: 'asc' },
                     include: {
                         transactions: {
-                            take: 5,
+                            take: 3,
                             orderBy: { createdAt: 'desc' }
                         },
                         _count: {
                             select: { transactions: true }
+                        },
+                        invoices: {
+                            take: 1,
+                            where: { invoiceStatus: InvoiceStatus.Due },
                         }
-                        
                     }
                 }
             }
@@ -93,41 +100,44 @@ export class CompanyService {
             }
         });
 
-        const spentAmount = spentAmountAggregate._sum.amount ?? 0;
+        const spentAmount: number = Number(spentAmountAggregate._sum.amount ?? 0);
 
-        return overviewResponse(company, Number(spentAmount));
+        return overviewResponse(company, spentAmount);
     }
 }
 
 function overviewResponse(company: CompanyPayload, spentAmount: number): CompanyOverviewResponse {
     const card = company.cards[0] as typeof company.cards[0]
-    if (!card) {
-        throw new Error('No cards found for this company');
+
+    const cardImage = {
+            id: card?.id,
+            brand: card?.brand,
+            tier: card?.tier,
+            status: card?.status,
+            maskedCardNumber: card?.cardNumber ? maskCardNumber(card.cardNumber) : undefined,
+            expiryMonth: card?.expiryMonth,
+            expiryYear: card?.expiryYear
     }
+
+    const transactions = card?.transactions || [];
+
     return {
         company: {
             name: company.name
         },
-        cardImage: {
-            brand: card.brand,
-            tier: card.tier,
-            status: card.status,
-            maskedCardNumber: maskCardNumber(card.cardNumber),
-            expiryMonth: card.expiryMonth,
-            expiryYear: card.expiryYear
-        },
-
+        cardImage, 
         latestTransactions: {
-            transactions: card.transactions.map((txn) => ({
+            transactions: transactions.map((txn) => ({
                 amount: Number(txn.amount),
                 vendor: txn.vendor,
                 status: txn.status
             })),
-            transactionCount: card._count.transactions - card.transactions.length
+            transactionCount: card?._count.transactions ? card._count.transactions - card.transactions.length : 0
         },
         remainingSpend: {
             spent: spentAmount,
-            limit: Number(card.limit)
-        }
+            limit: Number(card?.limit) || 0,
+        },
+        invoiceDue: card?.invoices.length > 0
     };
 }

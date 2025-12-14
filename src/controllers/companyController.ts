@@ -25,14 +25,16 @@ export class CompanyController {
     static async createCompany(req: Request, res: Response): Promise<void> {
         try {
             const { name } = req.body;
-            const newCompany = await CompanyService.createCompany(name);
-
+            const newCompany = await CompanyService.createCompany({
+                name
+            });
             res.status(201).json({
                 success: true,
                 data: newCompany,
                 message: 'Company created successfully'
             });
         } catch (error: any) {
+            console.log(error)
             res.status(400).json({
                 success: false,
                 message: error.message || 'Error creating company'

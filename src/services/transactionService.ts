@@ -32,6 +32,7 @@ export class TransactionService {
         amount: string;
         vendor: string;
         status: TransactionStatus;
+        currency: string;
     }) {
         // Validation
         if (!data.cardId) {
@@ -64,7 +65,8 @@ export class TransactionService {
                 cardId: data.cardId,
                 amount: parseFloat(data.amount),
                 vendor: data.vendor,
-                status: data.status
+                status: data.status,
+                currency: data.currency,
             },
             include: {
                 card: false

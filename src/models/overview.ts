@@ -8,6 +8,7 @@ export type CompanyPayload = Prisma.CompanyGetPayload<{
                 _count: {
                     select: { transactions: true }
                 },
+                invoices: true;
             };
         };
     };
@@ -18,7 +19,8 @@ export interface CompanyOverviewResponse {
         name: string;
     };
     cardImage: {
-        maskedCardNumber: string;
+        id: string;
+        maskedCardNumber: string | undefined;
         expiryMonth: number;
         expiryYear: number;
         tier: string;
@@ -37,5 +39,6 @@ export interface CompanyOverviewResponse {
         }>;
         transactionCount: number;
     };
+    invoiceDue: boolean
 }
 

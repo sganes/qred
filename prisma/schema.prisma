@@ -61,7 +61,7 @@ model Card {
   limit           Decimal     @db.Decimal(10,2)  
   expiryMonth     Int
   expiryYear      Int
-  curreny         String
+  currency        String      @default("SEK")
   status          CardStatus
   brand           CardBrand
   cardNumber      String      @db.VarChar(4)
@@ -83,7 +83,7 @@ model Transaction {
   vendor        String
   createdAt     DateTime          @default(now())
   updatedAt     DateTime          @updatedAt
-  currency      String 
+  currency      String            @default("SEK")
   status        TransactionStatus
   invoiceId     String?
   invoice       Invoice?           @relation(fields: [invoiceId], references: [id])

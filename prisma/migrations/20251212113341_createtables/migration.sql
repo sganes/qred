@@ -30,6 +30,7 @@ CREATE TABLE "cards" (
     "limit" DECIMAL(10,2) NOT NULL,
     "expiryMonth" INTEGER NOT NULL,
     "expiryYear" INTEGER NOT NULL,
+    "currency" TEXT NOT NULL DEFAULT 'SEK',
     "status" "CardStatus" NOT NULL,
     "brand" "CardBrand" NOT NULL,
     "cardNumber" VARCHAR(4) NOT NULL,
@@ -48,6 +49,7 @@ CREATE TABLE "transactions" (
     "vendor" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
+    "currency" TEXT NOT NULL DEFAULT 'SEK',
     "status" "TransactionStatus" NOT NULL,
     "invoiceId" TEXT,
 

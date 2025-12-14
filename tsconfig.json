@@ -17,7 +17,8 @@
   },
   "include": [
     "src/**/*",
-    "prisma/**/*"
+    "prisma/**/*",
+    "test/**/*",
   ],
   "exclude": [
     "node_modules",

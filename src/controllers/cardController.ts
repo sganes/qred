@@ -41,7 +41,7 @@ export class CardController {
 
     static async createCard(req: Request, res: Response): Promise<void> {
         try {
-            const { companyId, limit, expiryMonth, expiryYear, status, brand, cardNumber, tier } = req.body;
+            const { companyId, limit, expiryMonth, expiryYear, status, brand, cardNumber, tier, currency } = req.body;
 
             const newCard = await CardService.createCard({
                 companyId,
@@ -51,7 +51,8 @@ export class CardController {
                 status,
                 brand,
                 cardNumber,
-                tier
+                tier,
+                currency,
             });
 
             res.status(201).json({

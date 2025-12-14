@@ -33,12 +33,13 @@ services:
       NODE_ENV: development
     ports:
       - "5000:5000"
+      - "5555:5555"
     volumes:
       - ./src:/app/src
       - ./prisma:/app/prisma
     networks:
       - qred-network
-    command: sh -c "npm run prisma:migrate && npm run dev"
+    command: sh -c "npm run prisma:migrate && npm run prisma:seed && npm run dev"
 
 volumes:
   postgres_data:

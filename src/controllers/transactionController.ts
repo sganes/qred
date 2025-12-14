@@ -41,13 +41,14 @@ export class TransactionController {
 
     static async createTransaction(req: Request, res: Response): Promise<void> {
         try {
-            const { cardId, amount, vendor, status } = req.body;
+            const { cardId, amount, vendor, status, currency } = req.body;
 
             const newTransaction = await TransactionService.createTransaction({
                 cardId,
                 amount,
                 vendor,
-                status
+                status,
+                currency,
             });
 
             res.status(201).json({

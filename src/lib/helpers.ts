@@ -3,6 +3,6 @@ export const isValidLastFourDigits = (value: string): boolean => {
     return /^[0-9]{4}$/.test(value);
 };
 
-export const maskCardNumber = (cardNumber: string): string => {
+export const maskCardNumber = (cardNumber: string): string  => {
     return cardNumber.slice(-4).padStart(16, '*');
 };
