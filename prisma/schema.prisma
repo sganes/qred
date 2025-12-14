@@ -1,0 +1,114 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum CardStatus {
+  Activate
+  Blocked
+  Expired
+  Pending
+}
+
+enum CardBrand {
+  Master
+  Visa
+}
+
+enum CardTier {
+  Gold
+  Silver
+  Platinum
+}
+
+enum TransactionStatus {
+  Posted
+  Declined
+  Refunded
+  Settled
+}
+
+enum InvoiceStatus {
+  Paid
+  Due
+  Overdue
+}
+
+model Company {
+  id           String   @id @default(uuid())
+  name         String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  cards        Card[]
+
+  @@map("companies")
+}
+
+model Card {
+  id              String      @id @default(uuid())
+  companyId       String
+  company         Company     @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  limit           Decimal     @db.Decimal(10,2)  
+  expiryMonth     Int
+  expiryYear      Int
+  curreny         String
+  status          CardStatus
+  brand           CardBrand
+  cardNumber      String      @db.VarChar(4)
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+  tier            CardTier
+  transactions    Transaction[]
+  invoices        Invoice[] 
+
+  @@map("cards")
+  @@index([companyId])
+}
+
+model Transaction {
+  id            String            @id @default(uuid())
+  cardId        String
+  card          Card              @relation(fields: [cardId], references: [id])
+  amount        Decimal
+  vendor        String
+  createdAt     DateTime          @default(now())
+  updatedAt     DateTime          @updatedAt
+  currency      String 
+  status        TransactionStatus
+  invoiceId     String?
+  invoice       Invoice?           @relation(fields: [invoiceId], references: [id])
+
+  @@map("transactions")
+  @@index([cardId])
+  @@index([cardId, createdAt])
+  @@index([cardId, status])
+}
+
+model Invoice {
+    id                String            @id @default(uuid())
+    cardId            String
+    card              Card              @relation(fields: [cardId], references: [id])
+    transactions      Transaction[]
+    invoiceStartDate  DateTime
+    invoiceEndDate    DateTime
+    invoiceDueDate    DateTime
+    totalAmount       Decimal           @db.Decimal(10,2)  
+    mindueAmount      Decimal           @db.Decimal(10,2) 
+    invoiceStatus     InvoiceStatus
+    createdAt         DateTime          @default(now()) 
+
+    @@map("invoices")
+    @@index([cardId])
+    @@index([cardId, invoiceStatus])
+}
+
