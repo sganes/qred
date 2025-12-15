@@ -94,6 +94,18 @@ docker compose up -d
 docker compose down
 ```
 
+### Run the following command to start the services and seed initial data:
+```bash
+docker compose up --build
+```
+- This will automatically seed the database with:
+    - Company data
+    - Card data
+    - Transaction data
+- Once seeding is complete, the Company ID will be printed in the logs.
+- Copy this Company ID and use it in the API endpoint to quickly test and retrieve the overview response.
+  http://localhost:5000/api/companies/{companyId}/overview
+
 ## 🌐 Access Application
 
 **Local Setup:**
