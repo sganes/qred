@@ -14,7 +14,24 @@ A TypeScript + Express REST API for managing credit cards, companies, transactio
 
 - Node.js v18+
 - PostgreSQL running on port 5432
-- OR Docker & Docker Compose
+- Database - qred, qred_test required to run the tests locally
+- Docker & Docker Compose
+
+## Implementation scope and improvements
+Scope: Only the endpoints necessary for the assignment were implemented.
+
+Limitations: Full CRUD operations (e.g., update and delete) are not covered for every service.
+
+Focus: The project prioritizes meeting the assignment’s requirements rather than implementing a complete production-ready API.
+
+Future Work: 
+- Additional endpoints could be added later to support full CRUD functionality. 
+- Current payload validation is limited, which could be done extensively in future to validate the payloads. 
+- Improved Error handling
+- Authentication and Authorization
+- Separate internal endpoints from public API endpoints.
+- Add more test for better coverage. Only basic unit testing and integration testing focusing on overview is implemented to  showcase how unit and integration testing can be implemented to test the controller and service.
+- Integrate frameworks like Pino for better logging, Linting for maiting coding standards.
 
 ## 📋 API Endpoints
 

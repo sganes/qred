@@ -13,7 +13,6 @@
     "prisma:migrate": "prisma migrate dev",
     "prisma:studio": "prisma studio",
     "prisma:seed": "ts-node src/test/seed.ts",
-    "pretest": "prisma generate && prisma migrate deploy",
     "test": "mocha -r ts-node/register/transpile-only 'src/**/*.test.ts'"
   },
   "dependencies": {
