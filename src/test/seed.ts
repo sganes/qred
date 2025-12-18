@@ -67,6 +67,7 @@ export async function seedTransaction(cardId: string) {
 
 export async function clearDatabase() {
     console.log("Clearing database...");
+    await prisma.invoice.deleteMany();
     await prisma.transaction.deleteMany();
     await prisma.card.deleteMany();
     await prisma.company.deleteMany();

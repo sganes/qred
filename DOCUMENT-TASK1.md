@@ -33,3 +33,17 @@
 - Maintain clear versioning in API contracts to avoid ambiguities between major and minor changes.
 - Establish a feedback loop between product managers and developers to ensure clarity and prevent late definitions.
 - CI/CD in place for incremental changes to be «delivered quickly, tested early, and deployed without delays.
+
+
+## How this aligns with values 
+
+# Transparency:
+ Clear documentation, all the stakeholders are well updated, strong feed back loop, everyone knows what thery doing and building
+
+# Innovation 
+ How API contracts are defined early and available for development
+ CI/CD - Early avaialbility of the fetaures for testing and detection of bugs at early stage
+ Unlocking the teams by prviding mock services
+
+# Passion
+  Encourage taking ownership, gromming meetings, Giving feedbacks shows the passion for deliveing the right producttransparency, innovation and passion.«
